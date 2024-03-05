@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  database:
+    image: mysql/mysql-server
+    volumes:
+      - mysql-data:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Amsterdam
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: verhuizing_platform
+      MYSQL_USER: develokey
+      MYSQL_PASSWORD: password
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Amsterdam
+      ADMINER_DEFAULT_SERVER: database
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Amsterdam
+      PMA_USER: root
+      PMA_PASSWORD: password
+      PMA_HOST: database
+      UPLOAD_LIMIT: 256M
+
+  mailer:
+    image: schickling/mailcatcher
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
